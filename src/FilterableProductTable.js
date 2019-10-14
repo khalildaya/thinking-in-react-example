@@ -79,7 +79,6 @@ class FilterableProductTable extends React.Component {
 
     handleShowOnlyStockedChange(event) {
         const showOnlyInStock = event.target.checked;
-        console.log("show", showOnlyInStock);
         this.setState({
             filteredData: this.filterData(this.state.filterText, showOnlyInStock, this.originalData),
             showOnlyInStock,
