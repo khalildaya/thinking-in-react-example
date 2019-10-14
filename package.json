@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^9.3.0",
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "jest-each": "^24.9.0"
   }
 }
