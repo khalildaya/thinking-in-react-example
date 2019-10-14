@@ -1,5 +1,8 @@
 import React from 'react';
-
+import {
+    filterData,
+    transformData
+} from './helper-functions.js'
 
 function SearchBar(props) {
     return (
@@ -60,19 +63,19 @@ function ProductTable(props) {
 class FilterableProductTable extends React.Component {
     constructor(props) {
         super(props);
+        this.originalData = transformData(this.props.data);
         this.state = {
-            filteredData: this.props.data,
+            filteredData: this.originalData,
             showOnlyInStock: false,
             filterText: '',
         };
-        this.originalData = this.props.data;
         this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
         this.handleShowOnlyStockedChange = this.handleShowOnlyStockedChange.bind(this);
     }
     handleFilterTextChange(event) {
         const filterText = event.target.value;
         this.setState({
-            filteredData: this.filterData(filterText, this.state.showOnlyInStock, this.originalData),
+            filteredData: filterData(filterText, this.state.showOnlyInStock, this.originalData),
             filterText,
         });
     }
@@ -80,57 +83,11 @@ class FilterableProductTable extends React.Component {
     handleShowOnlyStockedChange(event) {
         const showOnlyInStock = event.target.checked;
         this.setState({
-            filteredData: this.filterData(this.state.filterText, showOnlyInStock, this.originalData),
+            filteredData: filterData(this.state.filterText, showOnlyInStock, this.originalData),
             showOnlyInStock,
         });
     }
 
-    filterData(filterText, showOnlyInStock, data) {
-        // In case there is no filtered text, filtr list based on whether show products in stock only flag is checked or not
-        if (filterText === null || filterText === undefined || filterText.trim() === '') {
-            if (!showOnlyInStock) {
-                return data;
-            }
-            const result = [];
-            data.forEach(products => {
-                const filteredProducts = [];
-                products.items.forEach(product => {
-                    if (product.stocked) {
-                        filteredProducts.push(product);
-                    }
-                });
-                if (filteredProducts.length > 0) {
-                    result.push({
-                        category: products.category,
-                        items: filteredProducts,
-                    })
-                }
-            });
-            return result;
-        }
-        const result = [];
-        data.forEach(products => {
-            const filteredProducts = [];
-            products.items.forEach(product => {
-                if (product.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
-                    if (showOnlyInStock) {
-                        if (product.stocked) {
-                            filteredProducts.push(product);
-                        }
-                    } else {
-                        filteredProducts.push(product);
-                    }
-                }
-            });
-            if (filteredProducts.length > 0) {
-                result.push({
-                    category: products.category,
-                    items: filteredProducts,
-                })
-            }
-        });
-        return result;
-    }
     render() {
         return (
             <div>
@@ -140,5 +97,6 @@ class FilterableProductTable extends React.Component {
         );
     }
 }
+
 
 export default FilterableProductTable

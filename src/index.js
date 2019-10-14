@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import FilterableProductTable from './FilterableProductTable';
+import FilterableProductTable from './components/FilterableProductTable/FilterableProductTable.js';
 
 const data = [
     {category: "Sporting Goods", price: "$49.99", stocked: true, name: "Football"},
@@ -11,35 +11,7 @@ const data = [
     {category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 7"}
   ];
 
-function transformData(data) {
-    const tempResult = {};
-    const result = [];
-
-    data.forEach(element => {
-        if (!tempResult[element.category]) {
-            tempResult[element.category] = {
-                category: element.category,
-                items: [{
-                    price: element.price,
-                    stocked: element.stocked,
-                    name: element.name,
-                }]
-            };
-        } else {
-            tempResult[element.category].items.push({
-                price: element.price,
-                stocked: element.stocked,
-                name: element.name,
-            });
-        }
-    });
-    const categoryNames = Object.getOwnPropertyNames(tempResult);
-    categoryNames.forEach(categoryName => {
-        result.push(tempResult[categoryName]);
-    });
-    return result;
-}
 ReactDOM.render(
-    <FilterableProductTable data={transformData(data)}/>,
+    <FilterableProductTable data={data}/>,
     document.getElementById("root")
 );
